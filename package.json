@@ -1,0 +1,32 @@
+{
+  "name": "justify-text-david-bouhaben",
+  "version": "1.0.0",
+  "description": "test technique text jusitifé tictactrip",
+  "keywords": [],
+  "homepage": "https://github.com/Darkheadbanger/justify-text-david-bouhaben#readme",
+  "bugs": {
+    "url": "https://github.com/Darkheadbanger/justify-text-david-bouhaben/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Darkheadbanger/justify-text-david-bouhaben.git"
+  },
+  "license": "ISC",
+  "author": "David Bouhaben",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "undici-types": "^7.14.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.7.2",
+    "nodemon": "^3.1.10",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
+}
