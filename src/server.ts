@@ -70,8 +70,22 @@ export const server: http.Server<
   typeof http.ServerResponse
 > = http.createServer(app);
 
-export const startServer = () => {
+/**
+ * @description Attach the error handler to the server's "error" event.
+ * This ensures that any errors during server operation are properly managed.
+ * @type {void}
+ */
+export const serverErrorHandler = (): void => {
   server.on("error", errorHandler);
+};
+
+/**
+ * @description Start the HTTP server and listen on the specified port.
+ * Sets up the "listening" event to log when the server is ready.
+ * @type {void}
+ */
+export const startServer = (): void => {
+  serverErrorHandler();
   server.on("listening", () => {
     const address: string | AddressInfo | null = server.address();
     const bind: string =
