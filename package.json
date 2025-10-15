@@ -13,10 +13,16 @@
   },
   "license": "ISC",
   "author": "David Bouhaben",
-  "type": "commonjs",
+  "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "tsx watch src/server.ts",
+    "start": "node dist/server.js",
+    "build": "tsc",
+    "test": "vitest",
+    "test:watch": "vitest --watch",
+    "test:coverage": "vitest --coverage",
+    "test:ui": "vitest --ui"
   },
   "dependencies": {
     "express": "^5.1.0",
@@ -24,9 +30,17 @@
   },
   "devDependencies": {
     "@types/express": "^5.0.3",
+    "@types/jest": "^30.0.0",
     "@types/node": "^24.7.2",
+    "@types/supertest": "^6.0.3",
+    "@vitest/ui": "^3.2.4",
+    "jest": "^30.2.0",
     "nodemon": "^3.1.10",
+    "supertest": "^7.1.4",
+    "ts-jest": "^29.4.5",
     "ts-node": "^10.9.2",
-    "typescript": "^5.9.3"
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4"
   }
 }
