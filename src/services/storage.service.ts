@@ -4,8 +4,8 @@ import type { RateLimitData } from "./interfaces/storage.interface.js";
  * Constants
  * @description Daily word limit and one day in milliseconds
  */
-const DAILY_WORD_LIMIT: number = 80000;
-const ONE_DAY_MS: number = 86400000;
+export const DAILY_WORD_LIMIT: number = 80000;
+export const ONE_DAY_MS: number = 86400000;
 
 /**
  * @description Storage for email-token pairs
@@ -13,7 +13,7 @@ const ONE_DAY_MS: number = 86400000;
  * Value: TOKEN (string)
  * @type {Map<string, string>}
  */
-const tokens: Map<string, string> = new Map<string, string>();
+export const tokens: Map<string, string> = new Map<string, string>();
 
 /**
  * @description Save a token for a given email
@@ -44,7 +44,7 @@ export const getToken: (email: string) => string | undefined = (
  * Value: RateLimitData (word count + last reset timestamp)
  * @type {Map<string, RateLimitData>}
  */
-const userWordCounters: Map<string, RateLimitData> = new Map<
+export const userWordCounters: Map<string, RateLimitData> = new Map<
   string,
   RateLimitData
 >();
