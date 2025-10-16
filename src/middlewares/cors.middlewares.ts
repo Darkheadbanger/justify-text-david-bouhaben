@@ -19,7 +19,7 @@ app.use((req: Request, response: Response, next: NextFunction): void => {
   );
   response.setHeader(
     "Access-Control-Allow-Methods", 
-    "GET, POST, PUT, DELETE, PATCH, OPTIONS"
+    "GET, POST, PUT, DELETE, PATCH, OPTIONS" 
   );
   next();
 });
