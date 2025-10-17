@@ -1,6 +1,6 @@
 /**
  * @description Interface for storage service
- * Defines the structure for rate limit data associated with a TOKEN.
+ * Defines the structure for rate limit data associated with a token.
  * Includes current word count and timestamp of the last reset.
  */
 export interface IRateLimitData {
