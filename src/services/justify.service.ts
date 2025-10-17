@@ -1,4 +1,10 @@
-export const justifyText = (
+import type {
+  ISplitTextIntoLines,
+  IAddTextToNewLine,
+  IAddTextToCurrentLine,
+} from "./interfaces/justify.interface.js";
+
+export const splitTextIntoLines: ISplitTextIntoLines = (
   text: string,
   numberOfChars: number = 80
 ): string => {
@@ -11,14 +17,19 @@ export const justifyText = (
 
   for (let i = 0; i < words.length; i++) {
     let word: string | undefined = words[i];
-    currentLineWords = addTextToNewLine(numberOfChars, currentLineWords, lines, word);
+    currentLineWords = addTextToNewLine(
+      numberOfChars,
+      currentLineWords,
+      lines,
+      word
+    );
   }
   addTextToCurrentLine(lines, currentLineWords);
 
   return lines.join("\n");
 };
 
-export const addTextToNewLine = (
+export const addTextToNewLine: IAddTextToNewLine = (
   numberOfChars: number = 80,
   currentLineWords: string[],
   lines: string[],
@@ -39,11 +50,11 @@ export const addTextToNewLine = (
       currentLineWords.push(word);
     }
   }
-  
+
   return currentLineWords; // ✅ Retourner le tableau actuel
 };
 
-export const addTextToCurrentLine = (
+export const addTextToCurrentLine: IAddTextToCurrentLine = (
   lines: string[],
   currentLineWords: string[]
 ) => {
@@ -52,8 +63,4 @@ export const addTextToCurrentLine = (
   }
 };
 
-// Tests
-console.log("=== Test 1 : Texte court ===");
-console.log(justifyText("Bonjour le monde", 20));
-console.log("\n=== Test 2 : Texte long ===");
-console.log(justifyText("Bonjour le monde aujourd'hui il fait beau", 20));
+export const justifyText = () => {};
