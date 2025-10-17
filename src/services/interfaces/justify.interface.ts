@@ -36,3 +36,11 @@ export interface IAddTextToNewLine {
 export interface IAddTextToCurrentLine {
   (lines: string[], currentLineWords: string[]): void;
 }
+
+export interface IJustifyText {
+  (text: string, numberOfCharsMax?: number): string;
+}
+
+export interface IJustifyLine {
+  (line: string, numberOfCharsMax?: number): string;
+}

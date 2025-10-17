@@ -2,13 +2,15 @@ import type {
   ISplitTextIntoLines,
   IAddTextToNewLine,
   IAddTextToCurrentLine,
+  IJustifyLine,
+  IJustifyText,
 } from "./interfaces/justify.interface.js";
 
 /**
  * Constants
  * @description Default maximum characters per line
  */
-const DEFAULT_MAX_CHARS = 80;
+export const DEFAULT_MAX_CHARS = 80;
 
 /**
  * @description Splits text into lines of a specified maximum length
@@ -94,7 +96,7 @@ export const addTextToCurrentLine: IAddTextToCurrentLine = (
  * Last line is not justified (left-aligned)
  * @type {string}
  */
-export const justifyText = (
+export const justifyText: IJustifyText = (
   text: string,
   numberOfCharsMax: number = DEFAULT_MAX_CHARS
 ) => {
@@ -121,7 +123,7 @@ export const justifyText = (
  * Single-word lines are returned as-is
  * @type {string}
  */
-const justifyLine = (
+const justifyLine: IJustifyLine = (
   line: string,
   numberOfCharsMax: number = DEFAULT_MAX_CHARS
 ) => {
