@@ -6,7 +6,7 @@ import {
   getUserWordCounter,
   isUserAllowedToUseWords,
   recordWordUsage,
-} from "../storage.service.js";
+} from "../storage.servic.js";
 import type { RateLimitData } from "../interfaces/storage.interface.js";
 
 /**
