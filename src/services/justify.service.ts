@@ -123,7 +123,7 @@ export const justifyText: IJustifyText = (
  * Single-word lines are returned as-is
  * @type {string}
  */
-const justifyLine: IJustifyLine = (
+export const justifyLine: IJustifyLine = (
   line: string,
   numberOfCharsMax: number = DEFAULT_MAX_CHARS
 ) => {
