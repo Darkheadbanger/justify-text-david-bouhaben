@@ -1,4 +1,13 @@
-import type { RateLimitData } from "./interfaces/storage.interface.js";
+import type {
+  IRateLimitData,
+  ISaveTokenFunction,
+  IGetTokenFunction,
+  IGetUserWordCounterFunction,
+  IsUserAllowedToUseWordsFunction,
+  IRecordWordUsageFunction,
+  TokensMap,
+  UserWordCountersMap,
+} from "./interfaces/storage.interface.js";
 
 /**
  * Constants
@@ -13,14 +22,14 @@ export const ONE_DAY_MS: number = 86400000;
  * Value: TOKEN (string)
  * @type {Map<string, string>}
  */
-export const tokens: Map<string, string> = new Map<string, string>();
+export const tokens: TokensMap = new Map<string, string>();
 
 /**
  * @description Save a token for a given email
  * Replaces existing token if email already exists
  * @type {void}
  */
-export const saveToken: (email: string, token: string) => void = (
+export const saveToken: ISaveTokenFunction = (
   email: string,
   token: string
 ): void => {
@@ -32,7 +41,7 @@ export const saveToken: (email: string, token: string) => void = (
  * Returns undefined if email not found
  * @type {string | undefined}
  */
-export const getToken: (email: string) => string | undefined = (
+export const getToken: IGetTokenFunction = (
   email: string
 ): string | undefined => {
   return tokens.get(email);
@@ -44,9 +53,9 @@ export const getToken: (email: string) => string | undefined = (
  * Value: RateLimitData (word count + last reset timestamp)
  * @type {Map<string, RateLimitData>}
  */
-export const userWordCounters: Map<string, RateLimitData> = new Map<
+export const userWordCounters: UserWordCountersMap = new Map<
   string,
-  RateLimitData
+  IRateLimitData
 >();
 
 /**
@@ -54,9 +63,9 @@ export const userWordCounters: Map<string, RateLimitData> = new Map<
  * Returns undefined if the user has never used the API
  * @type {RateLimitData | undefined}
  */
-export const getUserWordCounter = (
+export const getUserWordCounter: IGetUserWordCounterFunction = (
   token: string
-): RateLimitData | undefined => {
+): IRateLimitData | undefined => {
   return userWordCounters.get(token);
 };
 
@@ -65,11 +74,11 @@ export const getUserWordCounter = (
  * Does NOT modify the counter, only performs verification
  * @returns true if allowed, false if limit exceeded
  */
-export const isUserAllowedToUseWords = (
+export const isUserAllowedToUseWords: IsUserAllowedToUseWordsFunction = (
   token: string,
   numberOfWords: number
 ): boolean => {
-  const userCounter: RateLimitData | undefined = getUserWordCounter(token);
+  const userCounter: IRateLimitData | undefined = getUserWordCounter(token);
 
   if (!userCounter) {
     return true;
@@ -92,9 +101,12 @@ export const isUserAllowedToUseWords = (
  * @description Records word usage by a user
  * Automatically resets if it's a new day
  */
-export const recordWordUsage = (token: string, numberOfWords: number): void => {
+export const recordWordUsage: IRecordWordUsageFunction = (
+  token: string,
+  numberOfWords: number
+): void => {
   const now: number = Date.now();
-  const userCounter: RateLimitData | undefined = getUserWordCounter(token);
+  const userCounter: IRateLimitData | undefined = getUserWordCounter(token);
 
   if (userCounter) {
     const timeSinceLastReset: number = now - userCounter.lastReset;

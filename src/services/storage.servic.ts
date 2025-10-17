@@ -1,4 +1,4 @@
-import type { RateLimitData } from "./interfaces/storage.interface.js";
+import type { IRateLimitData } from "./interfaces/storage.interface.js";
 
 /**
  * Constants
@@ -44,9 +44,9 @@ export const getToken: (email: string) => string | undefined = (
  * Value: RateLimitData (word count + last reset timestamp)
  * @type {Map<string, RateLimitData>}
  */
-export const userWordCounters: Map<string, RateLimitData> = new Map<
+export const userWordCounters: Map<string, IRateLimitData> = new Map<
   string,
-  RateLimitData
+  IRateLimitData
 >();
 
 /**
@@ -56,7 +56,7 @@ export const userWordCounters: Map<string, RateLimitData> = new Map<
  */
 export const getUserWordCounter = (
   token: string
-): RateLimitData | undefined => {
+): IRateLimitData | undefined => {
   return userWordCounters.get(token);
 };
 
@@ -69,7 +69,7 @@ export const isUserAllowedToUseWords = (
   token: string,
   numberOfWords: number
 ): boolean => {
-  const userCounter: RateLimitData | undefined = getUserWordCounter(token);
+  const userCounter: IRateLimitData | undefined = getUserWordCounter(token);
 
   if (!userCounter) {
     return true;
@@ -94,7 +94,7 @@ export const isUserAllowedToUseWords = (
  */
 export const recordWordUsage = (token: string, numberOfWords: number): void => {
   const now: number = Date.now();
-  const userCounter: RateLimitData | undefined = getUserWordCounter(token);
+  const userCounter: IRateLimitData | undefined = getUserWordCounter(token);
 
   if (userCounter) {
     const timeSinceLastReset: number = now - userCounter.lastReset;

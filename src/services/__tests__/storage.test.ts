@@ -7,7 +7,7 @@ import {
   isUserAllowedToUseWords,
   recordWordUsage,
 } from "../storage.servic.js";
-import type { RateLimitData } from "../interfaces/storage.interface.js";
+import type { IRateLimitData } from "../interfaces/storage.interface.js";
 
 /**
  * @description Test Suite for Storage Service
@@ -62,14 +62,14 @@ describe("Storage Service - Token Management", () => {
 describe("Storage Service - Rate Limiting", () => {
   describe("getUserWordCounter", () => {
     it("should return undefined for a non-existent token", () => {
-      const result: RateLimitData | undefined =
+      const result: IRateLimitData | undefined =
         getUserWordCounter("nonexistent-token");
       expect(result).toBeUndefined();
     });
     it("should return RateLimitData for an existing token", () => {
       const token: string = "Token123";
       recordWordUsage(token, 1000);
-      const result: RateLimitData | undefined = getUserWordCounter(token);
+      const result: IRateLimitData | undefined = getUserWordCounter(token);
       expect(result).toBeDefined();
       expect(result?.wordCount).toBe(1000);
       expect(result?.lastReset).toBeDefined();
@@ -91,7 +91,7 @@ describe("Storage Service - isUserAllowedToUseWords", () => {
     const token: string = "newUser123";
     const allowedResult: boolean = isUserAllowedToUseWords(token, 1000);
     expect(allowedResult).toBe(true);
-  });  
+  });
   it("should allow user to use words within daily limit", () => {
     const token: string = "AlreadyUsedToken123";
 
