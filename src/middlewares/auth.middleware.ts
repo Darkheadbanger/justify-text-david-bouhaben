@@ -1,50 +1,61 @@
 import type { Request, Response, NextFunction } from "express";
 import { tokens } from "../services/storage.service.js";
 
-/**
- * @description Middleware to authenticate requests using Bearer token
- * Validates the Authorization header format and token existence
- * Attaches the token to req.token if valid
- */
 export const authenticate = (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  // 1. Get Authorization header
   const authHeader: string | undefined = req.headers.authorization;
+  const partsHeader: string[] = authHeader ? authHeader.split(" ") : [];
+  console.log("Auth Header:", authHeader);
+  console.log("Parts Header:", partsHeader);
+  thisTokenUnauthorized(authHeader, partsHeader, res);
 
-  // 2. Check if header exists
-  if (!authHeader) {
-    return res.status(401).send("Unauthorized: No token provided");
-  }
+  const token: string | undefined = partsHeader ? partsHeader[1] : undefined;
 
-  // 3. Check format "Bearer <token>"
-  const partsHeader: string[] = authHeader.split(" ");
-  if (!authHeader.startsWith("Bearer ") || partsHeader.length !== 2) {
-    return res.status(401).send("Unauthorized: Invalid token format");
-  }
-
-  // 4. Extract token
-  const token: string = partsHeader[1]!;
-
-  // 5. Check if token exists in storage
   let isTokenExist: boolean = false;
-  for (const [email, storedToken] of tokens) {
+  for (const [storedToken] of tokens) {
     if (storedToken === token) {
       isTokenExist = true;
       break;
     }
   }
 
-  // 6. If token doesn't exist, return 401
-  if (!isTokenExist) {
-    return res.status(401).send("Unauthorized: Invalid token");
+  thisTokenDosentExist(isTokenExist, token, res);
+
+  if (token === undefined) {
+    return res
+      .status(401)
+      .json({ message: "Unauthorized: Token is undefined" });
   }
-
-  // 7. Attach token to request
   req.token = token;
-
-  // 8. Continue to next middleware/controller
   next();
 };
+
+export const thisTokenUnauthorized = (
+  authHeader: string | undefined,
+  partsHeader: string[],
+  res: Response
+) => {
+  if (!authHeader) {
+    return res.status(401).json({ message: "Unauthorized: No token provided" });
+  }
+  if (!authHeader.startsWith("Bearer ") || partsHeader.length !== 2) {
+    return res
+      .status(401)
+      .json({ message: "Unauthorized: Invalid token format" });
+  }
+};
+
+export const thisTokenDosentExist = (
+  isTokenExist: boolean,
+  token: string | undefined,
+  res: Response
+) => {
+  if (!isTokenExist) {
+    return res.status(401).json({ message: "Unauthorized: Invalid token" });
+  }
+};
+
+authenticate;
