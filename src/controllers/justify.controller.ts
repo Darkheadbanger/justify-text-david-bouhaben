@@ -6,35 +6,43 @@ import {
   recordWordUsage,
 } from "../services/storage.service.js";
 
-export const justifyController = (req: Request, res: Response) => {
+/**
+ * @description Justifies text with rate limiting
+ * Checks word limit before justifying
+ * Records word usage after justification
+ * @type {void}
+ */
+export const justify = (req: Request, res: Response): void => {
+  // 1. Get text from body
   const text: string = req.body;
 
+  // 2. Validate text
   if (!text || typeof text !== "string" || text.trim().length === 0) {
-    return res.status(400).json({ message: "Bad Request: Text is required" });
+    res.status(400).send("Bad Request: Text is required");
+    return;
   }
 
-  const token: string | undefined = req.token;
+  // 3. Get token (set by auth middleware)
+  const token: string = req.token!;
 
-  if (token === undefined) {
-    return res
-      .status(401)
-      .json({ message: "Unauthorized: Token is undefined" });
-  }
-
+  // 4. Count words
   const words: string[] = countWords(text);
-  const wordLength = words.length;
+  const wordCount = words.length;
 
-  const isAllowed: boolean = isUserAllowedToUseWords(token, wordLength);
+  // 5. Check rate limit
+  const isAllowed: boolean = isUserAllowedToUseWords(token, wordCount);
   if (!isAllowed) {
-    return res
-      .status(402)
-      .json({ message: "Payment Required: Word limit exceeded for the token" });
+    res.status(402).send("Payment Required");
+    return;
   }
 
+  // 6. Justify text
   const justifiedText: string = justifyText(text);
 
-  recordWordUsage(token, wordLength);
+  // 7. Record usage
+  recordWordUsage(token, wordCount);
 
+  // 8. Return justified text
   res.setHeader("Content-Type", "text/plain");
   res.send(justifiedText);
 };
