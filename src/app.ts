@@ -1,16 +1,15 @@
 import express from "express";
+import tokenRoutes from "./routes/tokens.route.js";
+import justifRoutes from "./routes/justify.route.js";
 
-const app = express();
+const app: express.Express = express();
 
 app.use(express.json());
 
-app.get("/", (req, res) => {
-  res.json({ message: "Hello, World!" });
-});
+app.use(express.text({ type: "text/plain" }));
+app.use(express.json());
 
-app.use((req, res, next) => {
-  console.log("Request received");
-  next();
-});
+app.use("/", tokenRoutes);
+app.use("/", justifRoutes);
 
 export default app;
