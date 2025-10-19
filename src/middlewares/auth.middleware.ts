@@ -6,8 +6,39 @@ export const authenticate = (
   res: Response,
   next: NextFunction
 ) => {
+  
   const authHeader: string | undefined = req.headers.authorization;
+  
   const partsHeader: string[] = authHeader ? authHeader.split(" ") : [];
+  
+  thisTokenUnauthorized(authHeader, partsHeader, res);
+
+  const token: string | undefined = partsHeader ? partsHeader[1] : undefined;
+
+  let isTokenExist: boolean = false;
+  for (const [storedToken] of tokens) {
+    if (storedToken === token) {
+      isTokenExist = true;
+      break;
+    }
+  }
+  thisTokenDosentExist(isTokenExist, token, res);
+
+  if (token === undefined) {
+    return res
+      .status(401)
+      .json({ message: "Unauthorized: Token is undefined" });
+  }
+  
+  req.token = token;
+  next();
+};
+
+export const thisTokenUnauthorized = (
+  authHeader: string | undefined,
+  partsHeader: string[],
+  res: Response
+) => {
   if (!authHeader) {
     return res.status(401).json({ message: "Unauthorized: No token provided" });
   }
@@ -16,16 +47,16 @@ export const authenticate = (
       .status(401)
       .json({ message: "Unauthorized: Invalid token format" });
   }
+};
 
-  const tokenExtracted: string | undefined = partsHeader
-    ? partsHeader[1]
-    : undefined;
-
-  let isTokenExist: boolean = false;
-  for (const [email, storedToken] of tokens) {
-    if (storedToken === tokenExtracted) {
-      isTokenExist = true;
-      break;
-    }
+export const thisTokenDosentExist = (
+  isTokenExist: boolean,
+  token: string | undefined,
+  res: Response
+) => {
+  if (!isTokenExist) {
+    return res.status(401).json({ message: "Unauthorized: Invalid token" });
   }
 };
+
+authenticate;
