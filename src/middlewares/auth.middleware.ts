@@ -1,60 +1,50 @@
 import type { Request, Response, NextFunction } from "express";
 import { tokens } from "../services/storage.service.js";
-import type { IAuthenticate } from "./interfaces/auth.interface.js";
+
 /**
- * @description Authentication middleware for protected routes
- * Verifies Bearer token in Authorization header
- * Attaches token to req.token if valid
+ * @description Middleware to authenticate requests using Bearer token
+ * Validates the Authorization header format and token existence
+ * Attaches the token to req.token if valid
  */
-export const authenticate: IAuthenticate = (
+export const authenticate = (
   req: Request,
   res: Response,
   next: NextFunction
-): void => {
+) => {
+  // 1. Get Authorization header
   const authHeader: string | undefined = req.headers.authorization;
 
+  // 2. Check if header exists
   if (!authHeader) {
-    res.status(401).json({ message: "Unauthorized: No token provided" });
-    return;
+    return res.status(401).send("Unauthorized: No token provided");
   }
 
-  if (!authHeader.startsWith("Bearer ")) {
-    res.status(401).json({ message: "Unauthorized: Invalid token format" });
-    return;
+  // 3. Check format "Bearer <token>"
+  const partsHeader: string[] = authHeader.split(" ");
+  if (!authHeader.startsWith("Bearer ") || partsHeader.length !== 2) {
+    return res.status(401).send("Unauthorized: Invalid token format");
   }
 
-  // Extract token
-  const parts: string[] = authHeader.split(" ");
-  if (parts.length !== 2) {
-    res.status(401).json({ message: "Unauthorized: Invalid token format" });
-    return;
-  }
+  // 4. Extract token
+  const token: string = partsHeader[1]!;
 
-  const token: string = parts[1]!;
-
-  // Verify token exists in storage
-  const tokenExists: boolean = isTokenValid(token);
-
-  if (!tokenExists) {
-    res.status(401).json({ message: "Unauthorized: Invalid token" });
-    return;
-  }
-
-  // Attach token to request and continue
-  req.token = token;
-  next();
-};
-
-/**
- * @description Checks if a token exists in the storage
- * @param token - Token string to validate
- * @returns {boolean}
- */
-const isTokenValid = (token: string): boolean => {
+  // 5. Check if token exists in storage
+  let isTokenExist: boolean = false;
   for (const [email, storedToken] of tokens) {
     if (storedToken === token) {
-      return true;
+      isTokenExist = true;
+      break;
     }
   }
-  return false;
+
+  // 6. If token doesn't exist, return 401
+  if (!isTokenExist) {
+    return res.status(401).send("Unauthorized: Invalid token");
+  }
+
+  // 7. Attach token to request
+  req.token = token;
+
+  // 8. Continue to next middleware/controller
+  next();
 };
