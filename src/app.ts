@@ -7,7 +7,9 @@ const app: express.Express = express();
 app.use(express.json({ limit: "10mb" }));
 app.use(express.text({ type: "text/plain", limit: "10mb" }));
 
-app.use("/api", tokenRoutes);
-app.use("/api", justifRoutes);
+const apiLink: string = "/api";
+
+app.use(apiLink, tokenRoutes);
+app.use(apiLink, justifRoutes);
 
 export default app;
