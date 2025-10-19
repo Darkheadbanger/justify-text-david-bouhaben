@@ -82,7 +82,8 @@ describe("App Integration Tests", () => {
     });
 
     it("Should justify text with valid token", async () => {
-      const text = "This is a simple test text that needs to be justified properly.";
+      const text =
+        "Longtemps, je me suis couché de bonne heure. Parfois, à peine ma bougie éteinte, mes yeux se fermaient si vite que je n'avais pas le temps de me dire: Je m'endors.";
 
       const response = await request(app)
         .post("/api/justify")
@@ -94,7 +95,15 @@ describe("App Integration Tests", () => {
 
       expect(response.text).toBeDefined();
       expect(response.text.length).toBeGreaterThan(0);
-      expect(response.text).not.toBe(text); // Le texte doit être modifié
+      
+      // Vérifier que le texte a été justifié (au moins une ligne de 80 chars)
+      const lines = response.text.split("\n");
+      expect(lines.length).toBeGreaterThan(1); // Plusieurs lignes
+      
+      // Au moins la première ligne doit faire 80 caractères
+      if (lines.length > 1) {
+        expect(lines[0]!.length).toBe(80);
+      }
     });
 
     it("Should return 401 if no token provided", async () => {
@@ -156,16 +165,27 @@ describe("App Integration Tests", () => {
     });
 
     it("Should return 402 when word limit is exceeded", async () => {
-      // Créer un texte avec beaucoup de mots (> 80,000)
-      const words = Array(80001).fill("word").join(" ");
-
+      // D'abord, utiliser 1000 mots pour initialiser le compteur
+      const initialText = Array(1000).fill("word").join(" ");
       await request(app)
         .post("/api/justify")
         .set("Authorization", `Bearer ${validToken}`)
         .set("Content-Type", "text/plain")
-        .send(words)
-        .expect(402)
-        .expect("Payment Required");
+        .send(initialText)
+        .expect(200);
+
+      // Maintenant, essayer d'utiliser 79,500 mots supplémentaires (total = 80,500)
+      const moreWords = Array(79500).fill("word").join(" ");
+
+      const response = await request(app)
+        .post("/api/justify")
+        .set("Authorization", `Bearer ${validToken}`)
+        .set("Content-Type", "text/plain")
+        .send(moreWords);
+
+      // Devrait être refusé car 1000 + 79,500 = 80,500 > 80,000
+      expect(response.status).toBe(402);
+      expect(response.text).toBe("Payment Required");
     });
 
     it("Should allow multiple requests within the limit", async () => {
