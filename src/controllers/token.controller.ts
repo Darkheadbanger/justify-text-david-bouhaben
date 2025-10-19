@@ -8,7 +8,7 @@ import { saveToken, getToken } from "../services/storage.service.js";
  * If not, generates a new UUID token and saves it
  * @type {void}
  */
-export const generateToken = (req: Request, res: Response): void => {
+export const generateTokenController = (req: Request, res: Response): void => {
   // 1. Récupérer l'email du body
   const { email } = req.body;
 

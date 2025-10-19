@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import type { Request, Response } from "express";
-import { generateToken } from "../token.controller.js";
+import { generateTokenController } from "../token.controller.js";
 import * as storageService from "../../services/storage.service.js";
 
 // Mock du module storage
@@ -43,7 +43,7 @@ describe("Token Controller", () => {
       status: vi.fn((code: number) => res),
     } as unknown as Response;
 
-    generateToken(req, res);
+    generateTokenController(req, res);
 
     expect(res.setHeader).toHaveBeenCalledWith("Content-Type", "text/plain");
     expect(res.send).toHaveBeenCalled();
@@ -77,7 +77,7 @@ describe("Token Controller", () => {
     } as unknown as Response;
 
     // Act
-    generateToken(req, res);
+    generateTokenController(req, res);
 
     // Assert
     expect(storageService.getToken).toHaveBeenCalledWith(mockEmail);
@@ -95,7 +95,7 @@ describe("Token Controller", () => {
       send: vi.fn(() => res),
     } as unknown as Response;
 
-    generateToken(req, res);
+    generateTokenController(req, res);
 
     expect(res.status).toHaveBeenCalledWith(400);
     expect(res.send).toHaveBeenCalledWith("Bad Request: Email is required");
@@ -113,7 +113,7 @@ describe("Token Controller", () => {
       send: vi.fn(() => res),
     } as unknown as Response;
 
-    generateToken(req, res);
+    generateTokenController(req, res);
 
     expect(res.status).toHaveBeenCalledWith(400);
     expect(res.send).toHaveBeenCalledWith("Bad Request: Invalid email format");
