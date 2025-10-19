@@ -6,10 +6,12 @@ const app = express();
 app.use(express.json());
 
 /**
- * @description Middleware to handle Cross-Origin Resource Sharing (CORS).
- * This middleware sets the necessary headers to allow requests from any origin,
- * and specifies allowed headers and methods for incoming requests.
- * @type {express.RequestHandler}
+ * @description CORS middleware that sets necessary headers to allow requests from any origin
+ * and specifies allowed headers and methods for incoming requests
+ * @param req - Express request object
+ * @param response - Express response object
+ * @param next - Express next function
+ * @returns void
  */
 app.use((req: Request, response: Response, next: NextFunction): void => {
   response.setHeader("Access-Control-Allow-Origin", "*");
