@@ -177,6 +177,7 @@ describe("CORS Middleware", () => {
     // Arrange: Add origin header
     mockRequest.headers = {
       origin: "https://example.com",
+      origins: "https://another-origin.com",
     };
 
     // Act: Call the middleware
