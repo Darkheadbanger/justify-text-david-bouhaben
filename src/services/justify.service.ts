@@ -5,6 +5,7 @@ import type {
   IJustifyLine,
   IJustifyText,
 } from "./interfaces/justify.interface.js";
+import { countWords } from "./word-counter.service.js";
 
 /**
  * Constants
@@ -22,9 +23,7 @@ export const splitTextIntoLines: ISplitTextIntoLines = (
   text: string,
   numberOfChars: number = DEFAULT_MAX_CHARS
 ): string => {
-  const words: string[] = text
-    .split(/\s+/)
-    .filter((word: string) => word.length > 0);
+  const words = countWords(text);
 
   const lines: string[] = [];
   let currentLineWords: string[] = [];
