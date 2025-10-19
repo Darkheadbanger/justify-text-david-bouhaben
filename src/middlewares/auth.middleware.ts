@@ -1,12 +1,12 @@
 import type { Request, Response, NextFunction } from "express";
 import { tokens } from "../services/storage.service.js";
-
+import type { IAuthenticate } from "./interfaces/auth.interface.js";
 /**
  * @description Authentication middleware for protected routes
  * Verifies Bearer token in Authorization header
  * Attaches token to req.token if valid
  */
-export const authenticate = (
+export const authenticate: IAuthenticate = (
   req: Request,
   res: Response,
   next: NextFunction
