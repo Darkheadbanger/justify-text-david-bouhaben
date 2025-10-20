@@ -2,6 +2,18 @@
 
 A REST API that justifies text to 80 characters per line with rate limiting (80,000 words per day per user).
 
+## 🌐 Live Demo
+
+**API URL:** https://justify-text-david-bouhaben.onrender.com
+
+**Quick Test:**
+```bash
+# Generate a token
+curl -X POST https://justify-text-david-bouhaben.onrender.com/api/token \
+  -H "Content-Type: application/json" \
+  -d '{"email":"test@example.com"}'
+```
+
 ## 🚀 Features
 
 - ✅ **Text Justification**: Justifies text to exactly 80 characters per line
