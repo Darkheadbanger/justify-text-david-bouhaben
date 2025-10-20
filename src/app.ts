@@ -9,7 +9,7 @@ app.use(express.json({ limit: "10mb" }));
 app.use(express.text({ type: "text/plain", limit: "10mb" }));
 
 app.use("/", getJustifyRoutes);
-app.use("/", tokenRoutes);
-app.use("/", justifRoutes);
+app.use("/api", tokenRoutes);
+app.use("/api", justifRoutes);
 
 export default app;
