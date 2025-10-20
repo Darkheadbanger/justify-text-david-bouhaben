@@ -11,7 +11,6 @@ app.get("/", (req: express.Request, res: express.Response): void => {
       "POST /api/token": "Generate authentication token",
       "POST /api/justify": "Justify text (requires Bearer token)",
     },
-    documentation: "<API documentation URL>",
   });
 });
 
