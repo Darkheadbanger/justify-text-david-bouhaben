@@ -11,7 +11,7 @@ A REST API that justifies text to 80 characters per line with rate limiting (80,
 # Generate a token
 curl -X POST https://justify-text-david-bouhaben.onrender.com/api/token \
   -H "Content-Type: application/json" \
-  -d '{"email":"test@example.com"}'
+  -d '{"email":"test@example.com"}' 
 ```
 
 ## 🚀 Features
