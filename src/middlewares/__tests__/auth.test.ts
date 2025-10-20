@@ -14,7 +14,7 @@ import { tokens } from "../../services/storage.service.js";
  * - Token attachment to request
  */
 describe("Authentication Middleware", () => {
-  let mockRequest: Partial<Request>;
+  let mockRequest: Partial<Request> & { token?: string };
   let mockResponse: Partial<Response>;
   let mockNext: NextFunction;
 
@@ -46,11 +46,7 @@ describe("Authentication Middleware", () => {
     };
 
     // Act: Call the middleware
-    authenticate(
-      mockRequest as Request,
-      mockResponse as Response,
-      mockNext
-    );
+    authenticate(mockRequest as Request, mockResponse as Response, mockNext);
 
     // Assert: next() should be called
     expect(mockNext).toHaveBeenCalledTimes(1);
@@ -67,11 +63,7 @@ describe("Authentication Middleware", () => {
     };
 
     // Act: Call the middleware
-    authenticate(
-      mockRequest as Request,
-      mockResponse as Response,
-      mockNext
-    );
+    authenticate(mockRequest as Request, mockResponse as Response, mockNext);
 
     // Assert: Token should be attached to request
     expect(mockRequest.token).toBe(validToken);
@@ -82,11 +74,7 @@ describe("Authentication Middleware", () => {
     mockRequest.headers = {};
 
     // Act: Call the middleware
-    authenticate(
-      mockRequest as Request,
-      mockResponse as Response,
-      mockNext
-    );
+    authenticate(mockRequest as Request, mockResponse as Response, mockNext);
 
     // Assert: Should return 401
     expect(mockResponse.status).toHaveBeenCalledWith(401);
@@ -103,11 +91,7 @@ describe("Authentication Middleware", () => {
     };
 
     // Act: Call the middleware
-    authenticate(
-      mockRequest as Request,
-      mockResponse as Response,
-      mockNext
-    );
+    authenticate(mockRequest as Request, mockResponse as Response, mockNext);
 
     // Assert: Should return 401
     expect(mockResponse.status).toHaveBeenCalledWith(401);
@@ -124,11 +108,7 @@ describe("Authentication Middleware", () => {
     };
 
     // Act: Call the middleware
-    authenticate(
-      mockRequest as Request,
-      mockResponse as Response,
-      mockNext
-    );
+    authenticate(mockRequest as Request, mockResponse as Response, mockNext);
 
     // Assert: Should return 401
     expect(mockResponse.status).toHaveBeenCalledWith(401);
@@ -145,11 +125,7 @@ describe("Authentication Middleware", () => {
     };
 
     // Act: Call the middleware
-    authenticate(
-      mockRequest as Request,
-      mockResponse as Response,
-      mockNext
-    );
+    authenticate(mockRequest as Request, mockResponse as Response, mockNext);
 
     // Assert: Should return 401
     expect(mockResponse.status).toHaveBeenCalledWith(401);
@@ -174,11 +150,7 @@ describe("Authentication Middleware", () => {
     };
 
     // Act: Call the middleware
-    authenticate(
-      mockRequest as Request,
-      mockResponse as Response,
-      mockNext
-    );
+    authenticate(mockRequest as Request, mockResponse as Response, mockNext);
 
     // Assert: Should find the correct token
     expect(mockNext).toHaveBeenCalledTimes(1);
